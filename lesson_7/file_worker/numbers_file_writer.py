@@ -25,4 +25,4 @@ def number_writer(file, coun_l):
 
 
 write_numbers_to_file(12, 'task_1')
-number_writer('task_1_1.txt', 5)
+number_writer('../task_1_1.txt', 5)

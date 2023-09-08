@@ -15,7 +15,7 @@ def write_name_to_file():
         res = ''.join(sample(string.ascii_lowercase, randint(4, 7))).title()
         if len(set(res) & set(vowels)) > 0:
             names.append(res)
-    with open('task_2.txt', 'a', encoding='utf-8') as f:
+    with open('../task_2.txt', 'a', encoding='utf-8') as f:
         f.writelines('\n'.join(names))
 
 
