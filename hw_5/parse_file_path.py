@@ -1,6 +1,7 @@
 """✔ Напишите функцию, которая принимает на вход строку — абсолютный путь до файла.
 Функция возвращает кортеж из трёх элементов: путь, имя файла, расширение файла.
 """
+import os
 
 
 def path_parse(abs_path):
@@ -17,4 +18,9 @@ def path_parse(abs_path):
     # return tuple_path
 
 
-print(path_parse(r'C:\Users\Admin\Desktop\Education\GB\Python\lesson5.py'))
+def split_path(abs_path: str) -> tuple[str]:
+    return os.path.split(abs_path)[0], *os.path.split(abs_path)[-1].split('.')
+
+
+# print(path_parse(r'C:\Users\Admin\Desktop\Education\GB\Python\lesson5.py'))
+print(split_path('C:\Users\Admin\Desktop\Education\GB\Python\lesson5.py'))

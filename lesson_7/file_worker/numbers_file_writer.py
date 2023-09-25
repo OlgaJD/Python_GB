@@ -24,5 +24,6 @@ def number_writer(file, coun_l):
             f.write(f'{int_num:>10} | {float_num} \n')
 
 
-write_numbers_to_file(12, 'task_1')
-number_writer('../task_1_1.txt', 5)
+if __name__ == '__main__':
+    write_numbers_to_file(12, '../task_1')
+    # number_writer('../task_1_1.txt', 5)
