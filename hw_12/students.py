@@ -176,7 +176,7 @@ class Student:
         """Записывает данные дневника в файл json"""
         path = f'{self.surname}_{self.name}.json'
         with open(path, 'w', encoding='utf-8') as w:
-            w.write(json.dumps(self._dnevnik, indent=4, ensure_ascii=False))
+            w.write(json.dumps(self.__dnevnik, indent=4, ensure_ascii=False))
             
 
 
