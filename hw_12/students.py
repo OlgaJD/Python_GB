@@ -61,9 +61,9 @@ class Student:
         self.name = name
         self.middlename = middlename
         self.course = course if course else None
-        self._dnevnik = self.dnevnik_create(course)
+        self.__dnevnik = self.__dnevnik_create(course)
 
-    def dnevnik_create(self, course):
+    def __dnevnik_create(self, course):
         """ Создает дневник для студента на основании полученного списка в формате list.
         Оценка к предмету может быть только одна. Результаты тестов могут содержать несколько значений.
         Формат дневника - словарь вида:
@@ -73,25 +73,25 @@ class Student:
         }
         """
         lessons = CSVReader.lessons_from_csv(course)
-        self._dnevnik = dict()
+        self.__dnevnik = dict()
         for lesson in lessons:
-            self._dnevnik[''.join(lesson)] = {'Оценка': None, 'Результаты тестов': [None]}
-        return self._dnevnik
+            self.__dnevnik[''.join(lesson)] = {'Оценка': None, 'Результаты тестов': [None]}
+        return self.__dnevnik
 
     def __str__(self):
         """Метод представления для пользователя."""
         return f'Студент {self.surname} {self.name} {self.middlename} изучает предметы: ' \
-               f'{", ".join(list(map(str, self._dnevnik.keys())))} '
+               f'{", ".join(list(map(str, self.__dnevnik.keys())))} '
 
     def lessons(self):
         """Возвращает все предметы, которые изучает студент. Функция не возвращает оценки и результаты тестов."""
-        return ", ".join(list(map(str, self._dnevnik.keys())))
+        return ", ".join(list(map(str, self.__dnevnik.keys())))
 
     def get_grades(self):
         """Возвращает оценки по предметам, в виде списка: ['Предмет_1: оценка', 'Предмет_2: оценка']"""
         grades = []
-        for k in self._dnevnik.keys():
-            grades.append(''.join(f'{k}: {self._dnevnik[k]["Оценка"]}'))
+        for k in self.__dnevnik.keys():
+            grades.append(''.join(f'{k}: {self.__dnevnik[k]["Оценка"]}'))
         return grades
 
     def average_grade(self):
@@ -100,9 +100,9 @@ class Student:
         предмет не учитывается в расчетах среднего балла."""
         sum_grades = 0
         count_lessons = 0
-        for i in self._dnevnik.keys():
-            if self._dnevnik[i]["Оценка"] is not None:
-                sum_grades += self._dnevnik[i]["Оценка"]
+        for i in self.__dnevnik.keys():
+            if self.__dnevnik[i]["Оценка"] is not None:
+                sum_grades += self.__dnevnik[i]["Оценка"]
                 count_lessons += 1
         if count_lessons == 0:
             return 'У студента еще нет оценок'
@@ -111,39 +111,39 @@ class Student:
     def set_grade(self, lesson, grade):
         """Записывает оценку по указанному предмету в дневник.
         Оценка может быть только одна, поэтому каждый раз значение перезаписывается"""
-        if lesson not in self._dnevnik.keys():
+        if lesson not in self.__dnevnik.keys():
             raise ValueError('Студент не изучает указанный предмет')
         if not isinstance(grade, int):
             raise ValueError('Неверный формат. Оценка должна быть целым числом')
         if not 1 < grade < 6:
             raise ValueError('Неверное значение. Оценка должна быть в интервале от 2 до 5')
-        test_results = self._dnevnik[lesson]['Результаты тестов']
-        self._dnevnik[lesson] = {'Оценка': grade, 'Результаты тестов': test_results}
+        test_results = self.__dnevnik[lesson]['Результаты тестов']
+        self.__dnevnik[lesson] = {'Оценка': grade, 'Результаты тестов': test_results}
 
     def set_test_result(self, lesson: str, result: list):
         """Записывает результаты тестов по указанному предмету в дневник.
         Результатов тестов по предмету может быть несколько"""
-        if lesson not in self._dnevnik.keys():
+        if lesson not in self.__dnevnik.keys():
             raise ValueError('Студент не изучает указанный предмет')
         for i in result:
             if not isinstance(i, int):
                 raise ValueError('Неверный формат. Результаты тестов должны быть целыми числами')
         if list(filter(lambda x: x <= 0 or x > 101, result)):
             raise ValueError('Неверное значение. Результаты теста должны быть в интервале от 0 до 100')
-        grade = self._dnevnik[lesson]['Оценка']
-        old_results = self._dnevnik[lesson]['Результаты тестов']
+        grade = self.__dnevnik[lesson]['Оценка']
+        old_results = self.__dnevnik[lesson]['Результаты тестов']
         if None in old_results:
             old_results = result
         else:
             old_results += result
-        self._dnevnik[lesson] = {'Оценка': grade, 'Результаты тестов': old_results}
+        self.__dnevnik[lesson] = {'Оценка': grade, 'Результаты тестов': old_results}
 
     def get_test_result(self):
         """Возвращает результаты тестов по предметам в виде списка:
         ['Предмет_1: результаты тестов', 'Предмет_2: результаты тестов']"""
         results = []
-        for k in self._dnevnik.keys():
-            results.append(''.join(f'{k}: {self._dnevnik[k]["Результаты тестов"]}'))
+        for k in self.__dnevnik.keys():
+            results.append(''.join(f'{k}: {self.__dnevnik[k]["Результаты тестов"]}'))
         return results
 
     def average_tests(self, lesson=None):
@@ -153,19 +153,19 @@ class Student:
         Если результатов теста еще нет в значении среднего балла указывается 'Тесты не проводились'"""
         if lesson is None:
             results = []
-            for k in self._dnevnik.keys():
-                if None in self._dnevnik[k]["Результаты тестов"]:
+            for k in self.__dnevnik.keys():
+                if None in self.__dnevnik[k]["Результаты тестов"]:
                     results.append(''.join(f'{k}: Тесты не проводились'))
                 else:
-                    res_list = self._dnevnik[k]["Результаты тестов"]
+                    res_list = self.__dnevnik[k]["Результаты тестов"]
                     summ = sum(res_list)
                     count = len(res_list)
                     av = round((summ / count), 2)
                     results.append(''.join(f'{k}: {av}'))
             return results
 
-        results = self._dnevnik[lesson]['Результаты тестов']
-        if lesson not in self._dnevnik.keys():
+        results = self.__dnevnik[lesson]['Результаты тестов']
+        if lesson not in self.__dnevnik.keys():
             raise ValueError('Студент не изучает указанный предмет')
         if results is None:
             raise ValueError('Еще нет результатов по этому предмету')
@@ -176,7 +176,7 @@ class Student:
         """Записывает данные дневника в файл json"""
         path = f'{self.surname}_{self.name}.json'
         with open(path, 'w', encoding='utf-8') as w:
-            w.write(json.dumps(self._dnevnik, indent=4, ensure_ascii=False))
+            w.write(json.dumps(self.__dnevnik, indent=4, ensure_ascii=False))
             return 'Добавлено новое слово'
 
 
@@ -188,6 +188,7 @@ marty.set_grade('Chemistry', 3)
 marty.set_grade('Informatics', 5)
 marty.set_test_result('Chemistry', [5, 6, 10])
 marty.set_test_result('Biology', [80, 1, 99])
+marty.set_grade('Mathematics', 5)
 marty.set_grade('Biology', 3)
 marty.set_test_result('Literature', [10, 55, 80])
 print(f'Оценки: {marty.get_grades()}')
