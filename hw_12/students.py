@@ -176,8 +176,8 @@ class Student:
         """Записывает данные дневника в файл json"""
         path = f'{self.surname}_{self.name}.json'
         with open(path, 'w', encoding='utf-8') as w:
-            w.write(json.dumps(self.__dnevnik, indent=4, ensure_ascii=False))
-            return 'Добавлено новое слово'
+            w.write(json.dumps(self._dnevnik, indent=4, ensure_ascii=False))
+            
 
 
 marty = Student('Котиков', 'Марти', 'Оскарович', 2)
@@ -196,4 +196,4 @@ print(f'Тесты: {marty.get_test_result()}')
 print(f'Средний тест по Biology: {marty.average_tests("Biology")}')
 print(f'Средняя оценка по всем предметам: {marty.average_grade()}')
 print(f'Средний тест по всем предметам: {marty.average_tests()}')
-marty.archive()
+#marty.archive()
